@@ -87,7 +87,7 @@
 #define CMD_GET_PIN_STATUS		0x35
 #define CMD_ANALOG_WRITE		0x36
 #define CMD_ANALOG_READ			0x37
-#define CMD_ANALOG_REFERENCE	0x38
+#define CMD_ANALOG_REFERENCE		0x38
 
 #define CMD_SERVO_ATTACH		0x40
 #define CMD_SERVO_WRITE			0x41
@@ -96,6 +96,9 @@
 
 #define CMD_READ_DHT11			0x50
 #define CMD_READ_SR04			0x51
+
+/* Adding Support for SHT3x-Devices */
+#define CMR_READ_SHT3			0x52
 
 #define CMD_RESET_DEVICE		0xFF
 
