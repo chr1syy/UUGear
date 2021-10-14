@@ -90,6 +90,9 @@ uugearlib.readSR04.argtypes = [POINTER(UUGearDeviceProfile), c_int, c_int]
 uugearlib.detachUUGearDevice.restype = None
 uugearlib.detachUUGearDevice.argtypes = [POINTER(UUGearDeviceProfile)]
 
+uugearlib.readSHT.restype = c_int
+uugearlib.readSHT.argtypes = [POINTER(UUGearDeviceProfile), c_int]
+
 
 class UUGearDevice(object):
 	
@@ -177,5 +180,11 @@ class UUGearDevice(object):
 	def readSR04(self, trigPin, echoPin):
 		if self.isValid():
 			return uugearlib.readSR04(byref(self.devProfile), trigPin, echoPin)
+		else:
+			return -1
+		
+	def readSHT(self, pin):
+		if self.isValid():
+			return uugearlib.readSHT(byref(self.devProfile), pin)
 		else:
 			return -1
