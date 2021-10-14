@@ -498,6 +498,9 @@ int main(int argc, char **argv)
 							count > 3 ? (atoi (parts[3]) & 0xFF) : -1,
 							count > 4 ? (atoi (parts[4]) & 0xFF) : -1);
 						break;
+					case MSG_READ_SHT3:
+						sendCommand(CMD_READ_SHT3, clientId, targetFd, count > 3 ? atoi(parts[3]) : -1);
+						break;
 					case MSG_RESET_DEVICE:
 						sendCommandWithoutParameter(CMD_RESET_DEVICE, clientId, targetFd);
 						break;
