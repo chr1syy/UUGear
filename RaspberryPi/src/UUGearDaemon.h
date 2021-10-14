@@ -65,7 +65,7 @@
 #define MSG_GET_PIN_STATUS		14
 #define MSG_ANALOG_WRITE		15
 #define MSG_ANALOG_READ			16
-#define MSG_ANALOG_REFERENCE	17
+#define MSG_ANALOG_REFERENCE		17
 
 #define MSG_SERVO_ATTACH		25
 #define MSG_SERVO_WRITE			26
@@ -74,6 +74,8 @@
 
 #define MSG_READ_DHT11			41
 #define MSG_READ_SR04			42
+/* Adding Support for SHT3x-Devices */
+#define MSG_READ_SHT3			43
 
 #define MSG_RESET_DEVICE		217
 
@@ -96,9 +98,8 @@
 
 #define CMD_READ_DHT11			0x50
 #define CMD_READ_SR04			0x51
-
 /* Adding Support for SHT3x-Devices */
-#define CMR_READ_SHT3			0x52
+#define CMD_READ_SHT3			0x52
 
 #define CMD_RESET_DEVICE		0xFF
 
