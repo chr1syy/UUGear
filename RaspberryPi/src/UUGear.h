@@ -148,6 +148,27 @@ extern int readDHT(UUGearDevice *dev, int pin);
  */
 extern float readSR04(UUGearDevice *dev, int trigPin, int echoPin);
 
+/*
+ * Copying Function from DHT, trying to make it work for a SHT3x
+ * Same Structure as DHT
+ *
+ * parameters:
+ *	dev is the pointer of the device struct
+ *	pin is the digital pin that connects to the DATA wire of DHT sensor
+ *
+ * returns:
+ *	integer (4 bytes) that contains both humidity and temperature data in order:
+ *    1 byte humidity integer data
+ *    1 byte humidity decimal data
+ *    1 byte temperature integer data
+ *    1 byte temperature decimal data
+ *  if any error hanppens, return a negative value:
+ *	  -1 for timeout
+ *	  -2 for checksum error
+ *	  -3 for communication error (please check /var/log/syslog)
+ */
+extern int readSHT(UUGearDevice *dev, int pin);
+
 extern void cleanupUUGear();
 
 
