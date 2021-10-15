@@ -8,3 +8,6 @@ The idea of this project is to provide an abstracted model of Arduino device, an
 
 #### Project Homepage
 - please visit [here](http://www.uugear.com/uugear-rpi-arduino-solution/)
+
+### changelog
+- added support for i2c temperatur sensor SHT
