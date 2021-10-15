@@ -209,7 +209,7 @@ void loop() {
         cmdBuf = cmdBuf.substring(pos + cmdEndStrLen);
         processCommand(cmd);
         // for debugging
-        Serial.println(cmd);
+        // Serial.println(cmd);
       }
     }
   }
