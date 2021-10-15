@@ -30,6 +30,23 @@
 #include <EEPROM.h>
 #include <Servo.h>
 
+// I2C Communication for SHT3x
+#include <Wire.h>
+#include "Adafruit_SHT31.h"
+
+// switch for SHT
+#define USE_SHT
+
+// register SHT and define response codes
+#if defined(USE_SHT)
+Adafruit_SHT31 sht = Adafruit_SHT31();
+#define SHT_ADDR       0x44
+#define RESP_SHT_ERR   "-3"
+#define RESP_SHT_TOUT  "-1"
+#endif
+
+String response = "";
+
 #define BAUD_RATE  115200
 
 #define EEPROM_SIZE  1024
@@ -88,6 +105,14 @@ void setup() {
     generateID();
   }
 
+  #if defined(USE_SHT)
+  // init i2c bus
+  if (!sht.begin(SHT_ADDR)){
+      response = RESP_SHT_ERR;
+    }
+   #endif
+
+  
   // initialize serial port
   Serial.begin(BAUD_RATE);
   while (!Serial) {
@@ -183,6 +208,8 @@ void loop() {
         String cmd = cmdBuf.substring(0, pos + cmdEndStrLen);
         cmdBuf = cmdBuf.substring(pos + cmdEndStrLen);
         processCommand(cmd);
+        // for debugging
+        Serial.println(cmd);
       }
     }
   }
@@ -352,6 +379,9 @@ void processCommand(String cmd) {
       break;
     case 0x51:
       cmdReadSR04(cmd);
+      break;
+    case 0x52:
+      cmdReadSHT(cmd);
       break;
     case 0xF0:
 #if defined(__SCRIPT_ENGINE_ENABLED__) 
@@ -648,6 +678,51 @@ void cmdReadSR04(String cmd) {
     Serial.print(result);
     Serial.print(RESPONSE_END_STRING);
   }
+}
+
+// command to read SHT3 sensor
+// example: 55 52 44 01 0D 0A
+//          U  R  D  2  NL CR
+void cmdReadSHT(String cmd) {
+  if (cmd.length() > 5) {
+    // unused
+    // byte addr = cmd.charAt(2);
+    
+    byte clientId = cmd.charAt(3);
+
+    if(response == RESP_SHT_ERR){
+      
+        Serial.write(RESPONSE_START_CHAR);
+        Serial.write(clientId);
+        Serial.print(response);
+        Serial.print(RESPONSE_END_STRING);
+        return;
+    } else {
+        
+       // response with the result
+       uint8_t data[5];
+
+       float t = sht.readTemperature();
+       float h = sht.readHumidity();
+
+       data[0] = h;
+       h -= data[0];
+       data[1] = h * 100;
+
+       data[2] = t;
+       t -= data[2];
+       data[3] = t * 100;
+
+       long result = ((long)data[0] << 24) + ((long)data[1] << 16) + ((long)data[2] << 8) + (long)data[3];    
+            
+       Serial.write(RESPONSE_START_CHAR);
+       Serial.write(clientId);
+       Serial.print(result);
+       Serial.print(RESPONSE_END_STRING);
+    }
+    
+  }
+
 }
 
 #if defined(__SCRIPT_ENGINE_ENABLED__)
